@@ -2,7 +2,6 @@ import {createAction} from 'redux-actions';
 import { pushState } from 'redux-router';
 //import fetch from 'isomorphic-fetch';
 import _ from 'supergroup';
-import * as dimUtils from '../dimUtils';
 import * as Selectors from '../selectors';
 require('isomorphic-fetch');
 
@@ -41,7 +40,6 @@ const cacheData = createAction(DATA_CACHED);
 export function apicall(apistring, dontFetch) {
   if (typeof apistring !== 'string')
         debugger;
-
   const params = Selectors.parseApiId(apistring);
 
   return (dispatch, getState) => {
@@ -83,12 +81,12 @@ export function apicall(apistring, dontFetch) {
 }
 function apiurl(params={}) {
   let {schema, api, where, datasetLabel} = params;
-  if (!(schema && api && datasetLabel))
+  if (!(api && datasetLabel))
     debugger;
   let qs = _.chain(where).pairs()
               .map(d=>d.join('='))
               .join('&').value();
-  let url = '/data/' + schema + '/' + api + '?' + qs;
+  let url = 'http://localhost/api/' + api + '?' + qs;
   return url;
 }
 /*
@@ -104,11 +102,6 @@ export function fetchRecsAsync(apiquery) {
 }
 */
 
-const dimsSet = createAction(DIMLIST_SET);
-export function setDimsFromRecs(recs) {
-  let dims = dimUtils.fromRecs(recs);
-  return dimsSet(dims);
-}
 /*
 export const SUPERGROUPED_DIM = 'SUPERGROUPED_DIM';
 const supergrouped =  // puts dim into meta
@@ -124,17 +117,6 @@ export function supergroup(dim, recs) {
   //return dispatch(action);
 }
 */
-export function supergroupAsync(dim, recs) {
-  return (dispatch, getState) => {
-    var sg = _.supergroup(recs, dim.func || dim.field);
-    if (sg.length)
-      sg = sg.sortBy(a=>-a.records.length);
-    //DEBUG
-    //sg = sg.slice(0,3);
-    var action = supergrouped(sg, dim);
-    return dispatch(action);
-  };
-}
 export const valHighlighted = (dispatch, router, dim, val) => {
   let query = router.location.query;
   if (dim && val)
@@ -156,11 +138,3 @@ export const filterOut = (dispatch, router, dim, val, which) => {
   dispatch(pushState(query, router.location.pathname,query));
 };
 
-/*
-export const MSG = 'MSG';
-export const messageChanged = createAction(MSG);
-export const sgValMsg = createAction(MSG,
-  d=>d,
-  (val,dim,ctr)=>{return {
-    name:dim.field||'general', val:val, dim:dim,ctr:ctr}});
-*/

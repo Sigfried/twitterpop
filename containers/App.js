@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 //import Explore from '../components/Explore'; // from real-world redux starter
 //import Explorer from '../components/Explorer'; // my thing
 import DQData from '../components/DQData';
-import PickData from '../components/PickData';
-import { resetErrorMessage } from '../actions';
 import * as Selector from '../selectors';
 
 import d3 from 'd3';
@@ -29,7 +27,12 @@ class App extends Component {
   }
   componentWillMount() {
     const {configChange, router} = this.props;
-    configChange(router, null, null, '/dimsetsets');
+    configChange(router, null, null, '/main');
+    let apiparams = {
+        api:'links',
+        datasetLabel: 'links',
+    };
+    this.props.apicall(Selector.apiId(apiparams));
   /*
     let {explorer, dispatch, apicall, schema} = this.props;
     schema = schema || 'phis_dq';
@@ -42,7 +45,6 @@ class App extends Component {
   */
   }
   render() {
-        //<PickData tableWidth={700} tableHeight={1000}/>
     const { explorer, schema, configChange, router, apicall } = this.props;
 
     let schemaChoices = explorer.config.schemaChoices.map(
@@ -78,13 +80,7 @@ class App extends Component {
     return (
       <div>
         <Navbar>
-            <NavBrand><a href="/">Explorer</a></NavBrand>
-            <Nav>
-              <NavItem eventKey={3} href="/dimsetsets">Dimsetset Browser</NavItem>
-              <NavDropdown eventKey={4} title={schema || 'Choose schema'} id="basic-nav-dropdown">
-                {schemaChoices}
-              </NavDropdown>
-            </Nav>
+            <NavBrand><a href="/">TwitterPop</a></NavBrand>
           </Navbar>
         {this.renderErrorMessage()}
         {children}
@@ -96,14 +92,7 @@ class App extends Component {
               </NavDropdown>
     */
   }
-  schemaChoose(apicall, schema, configChange, router) {
-    configChange(router, 'schema', schema);
-    let apiparams = {
-        schema,
-        api:'dimsetsets',
-        datasetLabel: 'dimsetsets-summary',
-    };
-    apicall(Selector.apiId(apiparams));
+  schemaChoose(apicall, configChange, router) {
   }
   dssChoose(evt, dss) {
     ExplorerActions.queryChange(
@@ -143,7 +132,7 @@ App.childContextTypes =  {
 App.propTypes = {
   // Injected by React Redux
   errorMessage: PropTypes.string,
-  resetErrorMessage: PropTypes.func.isRequired,
+  //resetErrorMessage: PropTypes.func.isRequired,
   //pushState: PropTypes.func.isRequired,
   //inputValue: PropTypes.string.isRequired,
   //explorer: PropTypes.object.isRequired,
@@ -167,7 +156,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   apicall: ExplorerActions.apicall,
   configChange: ExplorerActions.configChange,
-  resetErrorMessage,
+  //resetErrorMessage,
   dispatch: d => d
   //pushState,
 })(App);

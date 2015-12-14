@@ -1,68 +1,35 @@
-import * as ActionTypes from '../actions';
-import merge from 'lodash/object/merge';
-import paginate from './paginate';
-import explorer from './explorer';
-import { routerStateReducer as router } from 'redux-router';
-import { combineReducers } from 'redux';
+import 'babel-core/polyfill';
+import React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { ReduxRouter } from 'redux-router';
+import configureStore from './store/configureStore';
+//import { devTools, persistState } from 'redux-devtools';
+//import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+//import explorerconf from './explorer.conf';
 
-// Updates an entity cache in response to any action with response.entities.
-function entities(state = { users: {}, repos: {} }, action) {
-  if (action.response && action.response.entities) {
-    return merge({}, state, action.response.entities);
-  }
+const store = configureStore();
+window.store = store; // for debugging
+console.log('making window.store available for debugging');
 
-  return state;
+render(
+  <div>
+  <Provider store={store}>
+    <ReduxRouter />
+  </Provider>
+  </div>,
+  document.getElementById('root')
+);
+/*
+  <DebugPanel top right bottom>
+      <DevTools store={store} monitor={LogMonitor} />
+  </DebugPanel>
+*/
+
+if (process.env.NODE_ENV !== 'production') {
+  // Use require because imports can't be conditional.
+  // In production, you should ensure process.env.NODE_ENV
+  // is envified so that Uglify can eliminate this
+  // module and its dependencies as dead code.
+  //require('./createDevToolsWindow')(store);
 }
-
-// Updates error message to notify about the failed fetches.
-function errorMessage(state = null, action) {
-  const { type, error } = action;
-
-  if (type === ActionTypes.RESET_ERROR_MESSAGE) {
-    return null;
-  } else if (error) {
-    return action.error;
-  }
-
-  return state;
-}
-
-// Updates the pagination data for different actions.
-const pagination = combineReducers({
-  starredByUser: paginate({
-    mapActionToKey: action => action.login,
-    types: [
-      ActionTypes.STARRED_REQUEST,
-      ActionTypes.STARRED_SUCCESS,
-      ActionTypes.STARRED_FAILURE
-    ]
-  }),
-  stargazersByRepo: paginate({
-    mapActionToKey: action => action.fullName,
-    types: [
-      ActionTypes.STARGAZERS_REQUEST,
-      ActionTypes.STARGAZERS_SUCCESS,
-      ActionTypes.STARGAZERS_FAILURE
-    ]
-  })
-});
-
-function viz_data(state = [], action) {
-    switch (action.type) {
-        case 'LOADED_VIZ_DATA':
-            return Object.assign({}, state, action.payload);
-        default:
-            return state;
-    }
-}
-
-const rootReducer = combineReducers({
-  explorer,
-  entities,
-  pagination,
-  errorMessage,
-  router,
-  viz_data
-});
-
-export default rootReducer;

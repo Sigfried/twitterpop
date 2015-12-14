@@ -1,5 +1,4 @@
-links = {
-  "links": [
+links = [
     {
       "arp": "noahgagner", 
       "pp": "quindi13"
@@ -9592,5 +9591,4 @@ links = {
       "arp": "RfOhioSteeteam", 
       "pp": "RascalFlattsB1"
     }
-  ]
-}
+];
