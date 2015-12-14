@@ -2,7 +2,7 @@
 
 const POP_THRESHHOLD = 5;
 
-var pp = _.chain(links).supergroup(['pp','arp'])
+var pp = _.chain(links.links).supergroup(['pp','arp'])
             .filter(d=>d.children.length >= POP_THRESHHOLD)
             .filter(d=>userdata[d+''])
             .addSupergroupMethods()
@@ -21,7 +21,7 @@ var getSize = d => userdata[d+''].statuses_count;
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 300 - margin.top - margin.bottom;
 
 var x = d3.scale.log()
     .range([0, width]);
