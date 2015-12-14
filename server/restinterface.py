@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from flask import Flask, jsonify, abort, request, json
+from flask.ext.cors import CORS
 import json
 import sys
 import csv
@@ -10,8 +11,10 @@ import string
 from collections import defaultdict
 from birdy.twitter import UserClient
 
+tokenfilename = sys.argv[1]
+
 # Connect to Twitter
-tokens = yaml.safe_load(open('datapop.yml'))
+tokens = yaml.safe_load(open(tokenfilename))
 client = UserClient(tokens['consumer_key'],tokens['consumer_secret'],
     tokens['access_token'],tokens['access_secret'])
 
@@ -47,6 +50,8 @@ for line in f.readlines()[:-1]:
 
 
 app = Flask(__name__)
+CORS(app) #TODO: refine this so it's not so wide open
+
 ###############################################################################
 # Create API Interfaces
 @app.route("/api/links", methods=['GET'])
