@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from flask import Flask, jsonify, abort, request, json
+from flask.ext.cors import CORS
 import json
 import sys
 import csv
@@ -47,6 +48,8 @@ for line in f.readlines()[:-1]:
 
 
 app = Flask(__name__)
+CORS(app) #TODO: refine this so it's not so wide open
+
 ###############################################################################
 # Create API Interfaces
 @app.route("/api/links", methods=['GET'])
