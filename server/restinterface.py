@@ -11,8 +11,10 @@ import string
 from collections import defaultdict
 from birdy.twitter import UserClient
 
+tokenfilename = sys.argv[1]
+
 # Connect to Twitter
-tokens = yaml.safe_load(open('datapop.yml'))
+tokens = yaml.safe_load(open(tokenfilename))
 client = UserClient(tokens['consumer_key'],tokens['consumer_secret'],
     tokens['access_token'],tokens['access_secret'])
 
