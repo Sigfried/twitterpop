@@ -1,13 +1,89 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>DQ CDM Visualization Platform -- Version 0.1.x</title>
-    <link rel="stylesheet" type="text/css" href="./fixed-data-table.css">
+    <title>TwitterPop -- Version 0.1.x</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <script src="./server/datasamples/links.js"></script>
+    <script src="./server/datasamples/words.js"></script>
+    <script src="./server/datasamples/userdata.js"></script>
+    <script src="./node_modules/d3/d3.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="./d3-cloud/build/d3.layout.cloud.js"></script>
+    <script src="./node_modules/underscore/underscore.js"></script>
+    <script src="./node_modules/supergroup/supergroup.js"></script>
+    <style>
+
+      body {
+        font: 10px sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      .dot {
+        stroke: #000;
+      }
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: orange;
+}
+
+.bar:hover {
+  fill: orangered ;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.d3-tip {
+  line-height: 1;
+  padding: 12px;
+  background: rgba(255, 200, 0, 0.2);
+/*
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+*/
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+    </style>
+  
   </head>
   <body>
+    <div style="height:200px">&nbsp;</div>
     <div id="root">
     </div>
-    <script src="/static/bundle.js"></script>
+    <!-- s cript src="/static/bundle.js"></script-->
   </body>
+  <script src="./twitter.js"></script>
 </html>
